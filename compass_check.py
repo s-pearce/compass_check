@@ -1,3 +1,4 @@
+#! /usr/bin/python
 # Compass checking script ver 0.2
 
 import re
@@ -339,6 +340,8 @@ class CompassData():
 
 
 def main():
+    print os.getcwd()
+    print 'Compass Accuracy Check v. %s' % VERSION
     (options, args) = parser.parse_args()
     if options.list_ports:
         list_ports()
@@ -346,7 +349,6 @@ def main():
         redtext('\nCompass check requires 2 arguments\n')
         parser.print_help()
         exit()
-    print 'Compass Accuracy Check v. %s' % VERSION
 
     host_port = args[0]
     glidername = args[1]
