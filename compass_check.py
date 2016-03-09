@@ -8,6 +8,7 @@
 import re
 import sys
 import os
+import os.path
 import time
 import optparse
 #import pdb
@@ -85,7 +86,10 @@ class pickler():
     def __init__(self, compass_data):
         self.cd = compass_data
         gname = compass_data.gname
-        drctry = './cc/pickles/'
+        homedir = os.path.expanduser("~")
+        if not os.path.exists(homedir + '/.cc'):
+            os.mkdir(homedir + '/.cc')
+        drctry = homedir + '/.cc/'
         self.pickle_name = drctry + gname + '_cc_' + DATESTR + '.pckl'
 
     def read(self):
