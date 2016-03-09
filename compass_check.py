@@ -1,5 +1,9 @@
 #! /usr/bin/python
-# Compass checking script ver 0.2
+
+"""compass_check 
+    Determines the quality and drift of a compass calibration on a Slocum G2 
+    electric glider.
+"""
 
 import re
 import sys
@@ -18,7 +22,7 @@ from cc.parse_options import parser
 from cc.serial_rf import GliderRF
 from cc.dockserver_com import dockserverCom
 
-VERSION = '0.2'
+VERSION = '0.3'
 
 # NOTES:  Add a save pickle so that if program fails, data is not lost, and
 # when started back up can check and announce preserved data.
