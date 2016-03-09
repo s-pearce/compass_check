@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: compass_check
+Version: 0.2
+Summary: Glider Compass Checking Program
+Home-page: UNKNOWN
+Author: Stuart Pearce
+Author-email: spearce@coas.oregonstate.edu
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires: numpy
+Requires: matplotlib
+Requires: serial
+Requires: dockserverTalk
