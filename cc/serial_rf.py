@@ -37,9 +37,10 @@ class GliderRF():
     reporting every cycle (i.e. report ++ m_heading), and in GliderLAB (i.e.
     lab_mode on).
     '''
-    def __init__(self, glidername, port, debug=False):
+    def __init__(self, glidername, port, verbose=False, debug=False):
         #pdb.set_trace()
         self.name = glidername
+        self.verbose = verbose
         self.debug = debug
         self.port = port.upper()
         if debug:

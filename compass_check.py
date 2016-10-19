@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
-"""compass_check 
-    Determines the quality and drift of a compass calibration on a Slocum G2 
+"""compass_check
+    Determines the quality and drift of a compass calibration on a Slocum G2
     electric glider.
 """
 
@@ -23,7 +23,7 @@ from cc.parse_options import parser
 from cc.serial_rf import GliderRF
 from cc.dockserver_com import dockserverCom
 
-VERSION = '0.3'
+VERSION = '1.0'
 
 # NOTES:  Add a save pickle so that if program fails, data is not lost, and
 # when started back up can check and announce preserved data.
@@ -119,10 +119,12 @@ class pickler():
 
 
 class CompassData():
-    def __init__(self, glidername, host_port, offset, n_samples=10, serialCom=False, debug=False):
+    def __init__(self, glidername, host_port, offset, n_samples=10,
+                 serialCom=False, verbose=False, debug=False):
         self.n_samples = n_samples
         self.gname = glidername
         self.offset = offset
+        self.verbose = verbose
         self.debug = debug
         self.fname = self.gname + '_cc_' + DATESTR + '_' + TIMESTR1
         self.data = {}
@@ -132,12 +134,13 @@ class CompassData():
         loaded = False
         self.pickler = pickler(self)
         loaded = self.pickler.read()
+        print 'Saved Data has been loaded.'
 
         # setup appropriate communication system with glider
         if serialCom:
-            self.glider = GliderRF(glidername, host_port, debug)
+            self.glider = GliderRF(glidername, host_port, verbose, debug)
         else:
-            self.glider = dockserverCom(glidername, host_port, debug)
+            self.glider = dockserverCom(glidername, host_port, verbose, debug)
 
         # --Begin collecting data--
         self.headings = []
@@ -189,12 +192,14 @@ class CompassData():
             hdg = raw_input(
                 "\nOnce glider is in position and magnetic fields are away, "
                 "\nenter the pedestal heading in positive degrees\nand hit "
-                "return to continue.\nType q to quit:\n>> ")
+                "return to continue.\nType d to view data and q to quit:\n>> ")
             #pdb.set_trace()
             if hdg == 'q':
                 hdg = None
                 reply_ok = True
                 self.pickler.remove()
+            elif hdg == 'd':
+                self.print_headings()
             else:
                 try:
                     hdg = int(hdg)
@@ -316,15 +321,18 @@ class CompassData():
         for key in self.data:
             errors.append(self.data[key]['error'])
             headings.append(self.data[key]['glider_true_deg'])
-        plt.stem(headings, errors, 'b:', 'bo', 'k-')
-        plt.xlim(-5, 365)
-        estd = np.std(errors)
-        plt.ylim(min(errors) - estd/4, max(errors) + estd/4)
-        plt.title(self.gname + ' ' + DATESTR + ' ' + TIMESTR2)
-        plt.xlabel('Glider True Heading, [degrees]')
-        plt.ylabel('Heading error, [degrees]')
-        plt.savefig('./' + self.fname + '.png')
-        plt.show()
+        if len(headings) > 1:
+            plt.stem(headings, errors, 'b:', 'bo', 'k-')
+            plt.xlim(-5, 365)
+            estd = np.std(errors)
+            plt.ylim(min(errors) - estd/4, max(errors) + estd/4)
+            plt.title(self.gname + ' ' + DATESTR + ' ' + TIMESTR2)
+            plt.xlabel('Glider True Heading, [degrees]')
+            plt.ylabel('Heading error, [degrees]')
+            plt.savefig('./' + self.fname + '.png')
+            plt.show()
+        else:
+            sys.stdout.write('Warning: Not enough data to make a plot!\n')
 
     def write_data(self):
         fid = open(self.fname + '.csv', 'w')
@@ -366,6 +374,7 @@ def main():
     cd = CompassData(
         glidername, host_port, offset,
         serialCom=options.serial,
+        verbose=options.verbose,
         debug=options.debug)
     cd.print_headings()
     cd.plot_data()

@@ -1,12 +1,12 @@
 Metadata-Version: 1.1
 Name: compass_check
-Version: 0.2
+Version: 1.0
 Summary: Glider Compass Checking Program
 Home-page: UNKNOWN
 Author: Stuart Pearce
 Author-email: spearce@coas.oregonstate.edu
 License: UNKNOWN
-Description: UNKNOWN
+Description: A program to check the accuracy of the compass values on a Slocum G2 electric glider.
 Platform: UNKNOWN
 Requires: numpy
 Requires: matplotlib
