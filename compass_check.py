@@ -119,11 +119,12 @@ class pickler():
 
 
 class CompassData():
-    def __init__(self, glidername, host_port, offset, n_samples=10,
+    def __init__(self, glidername, host_port, offset, magvar=None, n_samples=10,
                  serialCom=False, verbose=False, debug=False):
         self.n_samples = n_samples
         self.gname = glidername
         self.offset = offset
+        self.mag_var = magvar
         self.verbose = verbose
         self.debug = debug
         self.fname = self.gname + '_cc_' + DATESTR + '_' + TIMESTR1
@@ -134,7 +135,7 @@ class CompassData():
         loaded = False
         self.pickler = pickler(self)
         loaded = self.pickler.read()
-        print 'Saved Data has been loaded.'
+        if loaded; print('Saved Data has been loaded.')
 
         # setup appropriate communication system with glider
         if serialCom:
@@ -145,7 +146,7 @@ class CompassData():
         # --Begin collecting data--
         self.headings = []
         with self.glider:
-            if not loaded:
+            if not self.mag_var:
                 self.mag_var = self.glider.get_mag_var()
             self.config_check()
             print '\nMove glider to initial heading'
@@ -369,10 +370,11 @@ def main():
     host_port = args[0]
     glidername = args[1]
     offset = options.offset
+    magvar = options.magvar
     if not offset == 0.0:
         check_heading(offset)
     cd = CompassData(
-        glidername, host_port, offset,
+        glidername, host_port, offset, magvar
         serialCom=options.serial,
         verbose=options.verbose,
         debug=options.debug)

@@ -40,6 +40,20 @@ parser.add_option(
     type=float)
 
 parser.add_option(
+    "-m", "--magvar",
+    help=(
+        "Manually add the magnetic variation/declination (the"
+        "difference between Magnetic North and True North for "
+        "the location).  The program tries to get this from the"
+        "glider otherwise."
+        "Note: Enter the opposite sign as printed by the glider." 
+        "TWR handles this incorrectly."),
+    dest="magvar",
+    default=None,
+    action='store',
+    type=float)
+
+parser.add_option(
     "-v",
     help="Verbosity.  Explicitly print program actions.",
     dest="verbose",
