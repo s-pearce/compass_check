@@ -135,7 +135,7 @@ class CompassData():
         loaded = False
         self.pickler = pickler(self)
         loaded = self.pickler.read()
-        if loaded; print('Saved Data has been loaded.')
+        if loaded: print('Saved Data has been loaded.')
 
         # setup appropriate communication system with glider
         if serialCom:
@@ -374,7 +374,7 @@ def main():
     if not offset == 0.0:
         check_heading(offset)
     cd = CompassData(
-        glidername, host_port, offset, magvar
+        glidername, host_port, offset, magvar,
         serialCom=options.serial,
         verbose=options.verbose,
         debug=options.debug)
